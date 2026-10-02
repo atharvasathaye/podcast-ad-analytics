@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: podcast_raw
+    database: "{{ env_var('GCP_PROJECT_ID', 'your-gcp-project-id') }}"
+    schema: podcast_raw
+    tables:
+      - name: podcasts
+      - name: episodes
+      - name: advertisers
+      - name: campaigns
+      - name: downloads
+        loaded_at_field: download_timestamp
+        freshness:
+          warn_after: {count: 24, period: hour}
+          error_after: {count: 48, period: hour}
+      - name: impressions
+      - name: payouts

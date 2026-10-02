@@ -1,0 +1,41 @@
+name: dbt Slim CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'dbt_project/**'
+
+jobs:
+  dbt_ci:
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-bigquery==1.7.0
+
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Run dbt deps
+        run: dbt deps
+        working-directory: ./dbt_project
+
+      - name: Run dbt build (state modified)
+        run: dbt build --select state:modified+ --defer --state ./target
+        working-directory: ./dbt_project

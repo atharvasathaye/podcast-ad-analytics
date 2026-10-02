@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: mart_revenue_reporting
+    description: "Monthly revenue grouped by advertiser and creator."
+    columns:
+      - name: revenue_month
+        description: "The month the revenue was generated."
+        tests:
+          - not_null
+      - name: advertiser_name
+        description: "Name of the advertiser."
+        tests:
+          - not_null
+      - name: creator_revenue
+        description: "Total revenue paid to the creator for the month."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
+  - name: mart_funnel
+    description: "Campaign lifecycle tracking: booked budget vs delivered impressions."
+    columns:
+      - name: campaign_id
+        description: "Unique identifier for the campaign."
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_downloads
+    description: "Fact table for podcast downloads."
+    columns:
+      - name: download_id
+        description: "Unique identifier for a download."
+        tests:
+          - unique
+          - not_null
