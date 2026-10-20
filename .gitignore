@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# dbt artifacts
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+target/
+logs/
+
+# Generated data
+data/
+*.json
+!package.json
+!dbt_project.yml
+
+# Credentials and secrets
+*.pem
+*.key
+*.pfx
+*credentials*.json
+*service_account*.json
+.env*
+!.env.example
+
+# IDE & OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
